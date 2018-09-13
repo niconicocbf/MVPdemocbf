@@ -1,8 +1,6 @@
 package com.niconicocbf.tokubailab.mvpdemo_cbf.base;
 
-import com.niconicocbf.tokubailab.mvpdemo_cbf.DisplayView;
-
-public class BasePresenter<V extends DisplayView> implements Ipresenter<V> {
+public class BasePresenter<V extends BaseView> implements Ipresenter<V> {
     public V getMview() {
         return mview;
     }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MVPDemo-cbf</string>
+    <string name="picture_title_default">Picture_Title</string>
 </resources>
