@@ -1,9 +1,11 @@
 package com.niconicocbf.tokubailab.mvpdemo_cbf.view.customview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -11,8 +13,12 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.niconicocbf.tokubailab.mvpdemo_cbf.R;
 
 public class RoundImageView extends AppCompatImageView {
 
@@ -28,12 +34,32 @@ public class RoundImageView extends AppCompatImageView {
     //渲染图像，使用图像为绘制图形着色
     private BitmapShader mBitmapShader;
 
+    public String getmTextString() {
+        return mTextString;
+    }
+
+    public void setmTextString(String mTextString) {
+        this.mTextString = mTextString;
+    }
+
+    private String mTextString;
+    private int mTextColor;
+    private float mTextSize;
+    private int integer;
+    private int mTextBgColor = Color.DKGRAY;
+    private int mtvBackgroudColor;
+    private TextPaint mTextPaint;
+    private Paint.FontMetrics fontMetrics;
+    private float mTextHeight;
+    private Paint p;
+
     public RoundImageView(Context context) {
         this(context, null);
     }
 
     public RoundImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+
     }
 
     public RoundImageView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -41,8 +67,30 @@ public class RoundImageView extends AppCompatImageView {
 
         mMatrix = new Matrix();
         mPaint = new Paint();
+        p = new Paint();
         mPaint.setAntiAlias(true);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.WBottomTitleView, defStyleAttr, 0);
+        mTextString = typedArray.getString(R.styleable.WBottomTitleView_textString);
+        mTextColor = typedArray.getColor(R.styleable.WBottomTitleView_textColor, Color.GRAY);
+        mTextSize = typedArray.getDimension(R.styleable.WBottomTitleView_textDimension, 15);
+        integer = typedArray.getInteger(R.styleable.WBottomTitleView_mAlpha, 50);
+        mtvBackgroudColor = typedArray.getInteger(R.styleable.WBottomTitleView_mTextBgColor, mTextBgColor);
+        typedArray.recycle();
+        mTextPaint = new TextPaint();
+        mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        invalidateTextPantAndMeasurements();
 
+    }
+
+    private void invalidateTextPantAndMeasurements() {
+        mTextPaint.setTextSize(mTextSize);
+        mTextPaint.setColor(mTextColor);
+        if(TextUtils.isEmpty(mTextString)){
+            mTextString="";
+        }
+        fontMetrics = mTextPaint.getFontMetrics();
+        mTextHeight = fontMetrics.bottom;
     }
 
     @Override
@@ -67,6 +115,30 @@ public class RoundImageView extends AppCompatImageView {
         mPaint.setShader(mBitmapShader);
         canvas.drawRoundRect(new RectF(0,0,getWidth(),getHeight()), mBorderRadius, mBorderRadius,
                 mPaint);
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
+        int paddingRight = getPaddingRight();
+        int paddingBottom = getPaddingBottom();
+        int contentWidth = getWidth() - paddingLeft - paddingRight;
+        int contentHeight = getHeight() - paddingTop - paddingBottom;
+        fontMetrics = mTextPaint.getFontMetrics();
+        p.setColor(mTextBgColor);// 设置灰色
+        p.setAlpha(integer);
+        p.setStyle(Paint.Style.FILL);//设置填满
+        canvas.drawRoundRect(new RectF(paddingLeft,contentHeight - (fontMetrics.bottom - fontMetrics.top),contentWidth,contentHeight),mBorderRadius,mBorderRadius,p);
+                //paddingLeft, contentHeight - (fontMetrics.bottom - fontMetrics.top), contentWidth, contentHeight, p);// 矩形
+        // Draw the text.
+
+        canvas.drawText(mTextString,
+                contentWidth/2,
+                paddingTop + (contentHeight - mTextHeight),
+                mTextPaint);
+        // Draw the text drawable on top of the text.
+//        if (mTextDrawable != null) {
+//            mTextDrawable.setBounds(paddingLeft, paddingTop,
+//                    paddingLeft + contentWidth, paddingTop + contentHeight);
+//            mTextDrawable.draw(canvas);
+//        }
     }
 
 

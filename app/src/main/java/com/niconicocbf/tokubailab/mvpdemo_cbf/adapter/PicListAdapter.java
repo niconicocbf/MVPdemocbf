@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.R;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.bean.PicInfo;
+import com.niconicocbf.tokubailab.mvpdemo_cbf.view.customview.RoundImageView;
 
 import java.util.List;
 
@@ -23,11 +24,9 @@ public class PicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.context=context;
     }
     public class PicInfoViewHolder extends RecyclerView.ViewHolder {
-        public TextView displayTitleView;
-        public ImageView displayImageView;
+        public RoundImageView displayImageView;
         public PicInfoViewHolder(View itemView) {
             super(itemView);
-            displayTitleView =  itemView.findViewById(R.id.tv_pic_title);
             displayImageView =  itemView.findViewById(R.id.iv_pic);
 
         }
@@ -43,10 +42,8 @@ public class PicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         PicInfoViewHolder viewHolder = (PicInfoViewHolder)holder;
-//        Glide.with(context)
-//             .load(photoList.get(position).getUrl())
-//             .into(viewHolder.displayImageView);
         Glide.with(context).load(photoList.get(position).getImage_url()).into(viewHolder.displayImageView);
+        viewHolder.displayImageView.setmTextString(photoList.get(position).getPhoto_title());
 
 
 

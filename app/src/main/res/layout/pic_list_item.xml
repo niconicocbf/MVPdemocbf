@@ -5,25 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/tv_pic_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/picture_title_default"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_pic"
-        app:layout_constraintEnd_toEndOf="@+id/iv_pic"
-        app:layout_constraintStart_toStartOf="@+id/iv_pic" />
-
     <com.niconicocbf.tokubailab.mvpdemo_cbf.view.customview.RoundImageView
         android:scaleType="centerCrop"
         android:id="@+id/iv_pic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        app:textDimension="12sp"
+        app:textColor="#ffffff"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
