@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.niconicocbf.tokubailab.mvpdemo_cbf.R;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.adapter.PicListAdapter;
@@ -27,6 +28,11 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
 
     private RecyclerView picRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private List<PicInfo.InfoBean.PhotoBean> totalSuccessMsg;
+    private ArrayList<PicInfo.InfoBean.PhotoBean> dataLoadOneTime;
+    private PicListAdapter picListAdapter;
+    private int itemMarks=10;
+    private List<PicInfo.InfoBean.PhotoBean> newDatas;
 
     @Override
     protected PhotoZoupicpresenter createPresenter() {
@@ -48,44 +54,51 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
         mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
+        newDatas = new ArrayList<>();
 
     }
 
     @Override
     public void getDataSuccess(final List<PicInfo.InfoBean.PhotoBean> successMsg) {
+        totalSuccessMsg = successMsg;
+        dataLoadOneTime = new ArrayList<>();
+
+        for(int index=0;index<10;index++){
+            dataLoadOneTime.add(totalSuccessMsg.get(index));
+        }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final PicListAdapter picListAdapter = new PicListAdapter(getApplicationContext(), successMsg);
+                picListAdapter = new PicListAdapter(getApplicationContext(), dataLoadOneTime);
                 picRecyclerView.setAdapter(picListAdapter);
-                picRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-
-                    @Override
-                    public void onScrollStateChanged(RecyclerView recyclerView,
-                                                     int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                        if (newState == RecyclerView.SCROLL_STATE_IDLE
-                                && 10 + 1 == picListAdapter.getItemCount()) {
-                            mSwipeRefreshLayout.setRefreshing(true);
-                            // 此处在现实项目中，请换成网络请求数据代码，sendRequest .....
-                           // handler.sendEmptyMessageDelayed(0, 3000);
-                        }
-
-
-                    }});
             }
         });
+
+
 
 
     }
 
     @Override
-    public void getDataFail(List<PicInfo.InfoBean.PhotoBean> errorMsg) {
+    public void getDataFail(String errorMsg) {
 
     }
 
     @Override
     public void onRefresh() {
+        itemMarks+=10;
+        for (int i = itemMarks; i <itemMarks+10; i++) {
+            if(i>totalSuccessMsg.size()-1){
+                picListAdapter.addItem(newDatas);
+                break;
+                }
+            newDatas.add(totalSuccessMsg.get(i));
+        }
+        picListAdapter.addItem(newDatas);
+        newDatas.clear();
+        mSwipeRefreshLayout.setRefreshing(false);
+        Toast.makeText(this, "更新了五条数据..."+itemMarks, Toast.LENGTH_SHORT).show();
 
     }
 }

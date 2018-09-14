@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -52,6 +53,7 @@ public class RoundImageView extends AppCompatImageView {
     private Paint.FontMetrics fontMetrics;
     private float mTextHeight;
     private Paint p;
+    private float[] radiusArray = { 30f, 30f, 30f, 30f, 30f, 30f, 30f, 30f };
 
     public RoundImageView(Context context) {
         this(context, null);
@@ -73,7 +75,7 @@ public class RoundImageView extends AppCompatImageView {
         mTextString = typedArray.getString(R.styleable.WBottomTitleView_textString);
         mTextColor = typedArray.getColor(R.styleable.WBottomTitleView_textColor, Color.GRAY);
         mTextSize = typedArray.getDimension(R.styleable.WBottomTitleView_textDimension, 15);
-        integer = typedArray.getInteger(R.styleable.WBottomTitleView_mAlpha, 50);
+        integer = typedArray.getInteger(R.styleable.WBottomTitleView_mAlpha, 150);
         mtvBackgroudColor = typedArray.getInteger(R.styleable.WBottomTitleView_mTextBgColor, mTextBgColor);
         typedArray.recycle();
         mTextPaint = new TextPaint();
@@ -98,6 +100,11 @@ public class RoundImageView extends AppCompatImageView {
         if (getDrawable() == null){
             return;
         }
+        Path path = new Path();
+        path.addRoundRect(new RectF(0, 0, getWidth(), getHeight()), radiusArray, Path.Direction.CW);
+        canvas.clipPath(path);
+
+
         Bitmap bitmap = drawableToBitamp(getDrawable());
         mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
         float scale = 1.0f;
@@ -125,7 +132,7 @@ public class RoundImageView extends AppCompatImageView {
         p.setColor(mTextBgColor);// 设置灰色
         p.setAlpha(integer);
         p.setStyle(Paint.Style.FILL);//设置填满
-        canvas.drawRoundRect(new RectF(paddingLeft,contentHeight - (fontMetrics.bottom - fontMetrics.top),contentWidth,contentHeight),mBorderRadius,mBorderRadius,p);
+        canvas.drawRect(new RectF(paddingLeft,contentHeight - (fontMetrics.bottom - fontMetrics.top),contentWidth,contentHeight),p);
                 //paddingLeft, contentHeight - (fontMetrics.bottom - fontMetrics.top), contentWidth, contentHeight, p);// 矩形
         // Draw the text.
 
@@ -133,12 +140,8 @@ public class RoundImageView extends AppCompatImageView {
                 contentWidth/2,
                 paddingTop + (contentHeight - mTextHeight),
                 mTextPaint);
-        // Draw the text drawable on top of the text.
-//        if (mTextDrawable != null) {
-//            mTextDrawable.setBounds(paddingLeft, paddingTop,
-//                    paddingLeft + contentWidth, paddingTop + contentHeight);
-//            mTextDrawable.draw(canvas);
-//        }
+
+
     }
 
 

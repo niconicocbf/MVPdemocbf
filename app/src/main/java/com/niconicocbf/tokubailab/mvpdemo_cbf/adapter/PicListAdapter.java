@@ -48,6 +48,15 @@ public class PicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     }
+    //添加数据
+    public void addItem( List<PicInfo.InfoBean.PhotoBean> newDatas) {
+        //mTitles.add(position, data);
+        //notifyItemInserted(position);
+        newDatas.addAll(photoList);
+        photoList.clear();
+        photoList.addAll(newDatas);
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
