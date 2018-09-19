@@ -2,6 +2,7 @@ package com.niconicocbf.tokubailab.mvpdemo_cbf.view.activity;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,10 +11,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +32,7 @@ import com.niconicocbf.tokubailab.mvpdemo_cbf.presenter.PhotoZoupicpresenter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements DisplayView<List<PicInfo.InfoBean.PhotoBean>>, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements DisplayView<List<PicInfo.InfoBean.PhotoBean>>, SwipeRefreshLayout.OnRefreshListener ,SearchView.OnQueryTextListener{
 
 
     private RecyclerView picRecyclerView;
@@ -44,6 +47,7 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
     private Toolbar toolbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout mDrawerLayout;
+    private List<PicInfo.InfoBean.PhotoBean> filterList;
 
 
     @Override
@@ -62,7 +66,7 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));//设置Toolbar的背景颜色
 //        toolbar.setNavigationIcon(R.mipmap.ic_launcher_round);
-        toolbar.setLogo(R.mipmap.ic_image_search_black_24dp);//设置logo
+        toolbar.setLogo(R.mipmap.app_icon);//设置logo
         toolbar.setTitle("Hi Title");//设置标题
         setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.drawlayout);
@@ -80,12 +84,15 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
                 .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
                         .getDisplayMetrics()));
         newDatas = new ArrayList<>();
+        filterList = new ArrayList<>();
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tool_bar, menu);
+        SearchView mSearchView = (SearchView) menu.findItem(R.id.action_search_title).getActionView();
+        mSearchView.setOnQueryTextListener(this);
         return true;
     }
 
@@ -167,5 +174,22 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
             mSwipeRefreshLayout.setRefreshing(false);
         }
         Toast.makeText(this, "更新了10条数据..." + itemMarks, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        for(PicInfo.InfoBean.PhotoBean tmp:totalSuccessMsg){
+            if(tmp.getPhoto_title().contains(newText)){
+                filterList.add(tmp);
+            }
+        }
+        picListAdapter.filterItem(filterList,false);
+        filterList.clear();
+        return false;
     }
 }

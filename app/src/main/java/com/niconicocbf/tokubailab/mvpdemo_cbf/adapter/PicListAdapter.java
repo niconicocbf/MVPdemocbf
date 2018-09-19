@@ -116,6 +116,12 @@ public class PicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     }
+    public void filterItem(List<PicInfo.InfoBean.PhotoBean> newDatas, boolean ifhasMore){
+        photoList.clear();
+        photoList.addAll(newDatas);
+        hasMore = ifhasMore;
+        notifyDataSetChanged();
+    }
 
     //添加数据
     public void addItem(List<PicInfo.InfoBean.PhotoBean> newDatas, boolean ifhasMore) {
@@ -125,8 +131,8 @@ public class PicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //        photoList.clear();
 //        photoList.addAll(newDatas);
         photoList.addAll(newDatas);
-        notifyDataSetChanged();
         hasMore = ifhasMore;
+        notifyDataSetChanged();
     }
     // 暴露接口，改变fadeTips的方法
     public boolean isFadeTips() {
