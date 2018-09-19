@@ -1,5 +1,7 @@
 package com.niconicocbf.tokubailab.mvpdemo_cbf.view.activity;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +35,9 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
     private PicListAdapter picListAdapter;
     private int itemMarks=10;
     private List<PicInfo.InfoBean.PhotoBean> newDatas;
+    private GridLayoutManager mGridLayoutManager;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+
 
     @Override
     protected PhotoZoupicpresenter createPresenter() {
@@ -47,7 +52,8 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
     @Override
     protected void initView() {
         picRecyclerView = findViewById(R.id.recycler_view);
-        picRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        mGridLayoutManager = new GridLayoutManager(this, 2);
+        picRecyclerView.setLayoutManager(mGridLayoutManager);
         getmPresenter().getPicInfo();
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -74,9 +80,41 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
                 picRecyclerView.setAdapter(picListAdapter);
             }
         });
+        picRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastVisibleItem;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (picListAdapter.isFadeTips() == false && lastVisibleItem + 1 == picListAdapter.getItemCount()) {
+                        updateRecyclerView();
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = mGridLayoutManager.findLastVisibleItemPosition();
+
+            }
+        });
 
 
 
+
+    }
+
+    private void updateRecyclerView() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onRefresh();
+            }
+        },500);
 
     }
 
@@ -87,18 +125,22 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
 
     @Override
     public void onRefresh() {
-        itemMarks+=10;
-        for (int i = itemMarks; i <itemMarks+10; i++) {
-            if(i>totalSuccessMsg.size()-1){
-                picListAdapter.addItem(newDatas);
-                break;
+        if(itemMarks<=totalSuccessMsg.size()) {
+            itemMarks += 10;
+            for (int i = itemMarks; i < itemMarks + 10; i++) {
+                if (i > totalSuccessMsg.size() - 1) {
+                    picListAdapter.addItem(newDatas, true);
+                    break;
                 }
-            newDatas.add(totalSuccessMsg.get(i));
+                newDatas.add(totalSuccessMsg.get(i));
+            }
+            picListAdapter.addItem(newDatas, true);
+            newDatas.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
+        }else{
+            picListAdapter.addItem(newDatas, false);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
-        picListAdapter.addItem(newDatas);
-        newDatas.clear();
-        mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, "更新了五条数据..."+itemMarks, Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, "更新了10条数据..." + itemMarks, Toast.LENGTH_SHORT).show();
     }
 }
