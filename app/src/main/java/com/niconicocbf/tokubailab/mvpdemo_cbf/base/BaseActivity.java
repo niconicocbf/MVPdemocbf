@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.Window;
 
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity implements BaseView {
 
@@ -11,6 +13,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(getViewResId());
         mPresenter=createPresenter();
         if (null == mPresenter) {
@@ -21,6 +24,8 @@ public abstract class BaseActivity<T extends BasePresenter> extends AppCompatAct
 
         initView();
     }
+
+
 
     protected abstract T createPresenter();
     protected abstract int getViewResId();

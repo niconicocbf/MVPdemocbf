@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <!--右侧搜索操作条目-->
+    <item
+        android:id="@+id/action_search"
+        android:icon="@mipmap/ic_image_search_black_18dp"
+        android:title="Search"
+        app:showAsAction="ifRoom" />
+
+    <!--右侧添加操作条目-->
+    <item
+        android:id="@+id/action_add"
+        android:icon="@mipmap/ic_image_search_grey600_18dp"
+        android:title="Add"
+        app:showAsAction="ifRoom" />
+
+    <!--右侧设置条目，收起，不显示-->
+    <item
+        android:id="@+id/action_setting"
+        android:icon="@mipmap/ic_image_search_white_18dp"
+        android:title="Setting"
+        app:showAsAction="never" />
+
+    <!--右侧设置帮助条目，收起，不显示-->
+    <item
+        android:id="@+id/action_help"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="Help"
+        app:showAsAction="never" />
+
+
+</menu>

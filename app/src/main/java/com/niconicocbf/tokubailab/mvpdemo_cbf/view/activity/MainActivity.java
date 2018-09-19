@@ -2,14 +2,18 @@ package com.niconicocbf.tokubailab.mvpdemo_cbf.view.activity;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,12 +41,16 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
     private List<PicInfo.InfoBean.PhotoBean> newDatas;
     private GridLayoutManager mGridLayoutManager;
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawerLayout mDrawerLayout;
 
 
     @Override
     protected PhotoZoupicpresenter createPresenter() {
         return new PhotoZoupicpresenter();
     }
+
 
     @Override
     protected int getViewResId() {
@@ -51,6 +59,17 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
 
     @Override
     protected void initView() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));//设置Toolbar的背景颜色
+//        toolbar.setNavigationIcon(R.mipmap.ic_launcher_round);
+        toolbar.setLogo(R.mipmap.ic_image_search_black_24dp);//设置logo
+        toolbar.setTitle("Hi Title");//设置标题
+        setSupportActionBar(toolbar);
+        mDrawerLayout = findViewById(R.id.drawlayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.picture_title_default);
+        actionBarDrawerToggle.syncState();
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
+
         picRecyclerView = findViewById(R.id.recycler_view);
         mGridLayoutManager = new GridLayoutManager(this, 2);
         picRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -62,6 +81,12 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
                         .getDisplayMetrics()));
         newDatas = new ArrayList<>();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_tool_bar, menu);
+        return true;
     }
 
     @Override
