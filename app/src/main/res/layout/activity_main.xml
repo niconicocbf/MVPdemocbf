@@ -1,75 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.activity.MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <EditText
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawlayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-        <!--content-->
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_widget"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="360dp"
-                android:layout_height="232dp"
-                tools:layout_editor_absoluteX="12dp"
-                tools:layout_editor_absoluteY="86dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </android.support.v7.widget.Toolbar>
 
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-
-        <!--menu-->
         <FrameLayout
-            android:layout_width="180dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:background="@android:color/white">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="menu_text"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
+            <android.support.v4.widget.DrawerLayout
+                android:id="@+id/drawlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--content-->
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe_refresh_widget"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="360dp"
+                        android:layout_height="232dp"
+                        tools:layout_editor_absoluteX="12dp"
+                        tools:layout_editor_absoluteY="86dp" />
+                </android.support.v4.widget.SwipeRefreshLayout>
+                <!--menu-->
+                <FrameLayout
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:background="@android:color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="menu_text"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
 
 
+                </FrameLayout>
+            </android.support.v4.widget.DrawerLayout>
         </FrameLayout>
 
+    </LinearLayout>
 
-    </android.support.v4.widget.DrawerLayout>
+    <com.michaldrabik.tapbarmenulib.TapBarMenu
+        android:id="@+id/tapBarMenu"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="75dp">
 
+        <ImageView
+            android:id="@+id/item1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="500dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/ic_arrow_to_drawer" />
 
-</LinearLayout>
+        <Space
+            android:layout_width="56dp"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/item2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/ic_arrow_to_drawer" />
+
+    </com.michaldrabik.tapbarmenulib.TapBarMenu>
+</FrameLayout>

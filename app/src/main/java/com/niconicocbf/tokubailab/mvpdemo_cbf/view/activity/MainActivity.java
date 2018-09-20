@@ -2,37 +2,32 @@ package com.niconicocbf.tokubailab.mvpdemo_cbf.view.activity;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.michaldrabik.tapbarmenulib.TapBarMenu;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.R;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.adapter.PicListAdapter;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.base.BaseActivity;
-import com.niconicocbf.tokubailab.mvpdemo_cbf.base.BasePresenter;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.base.DisplayView;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.bean.PicInfo;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.presenter.PhotoZoupicpresenter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements DisplayView<List<PicInfo.InfoBean.PhotoBean>>, SwipeRefreshLayout.OnRefreshListener ,SearchView.OnQueryTextListener{
+
+public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements DisplayView<List<PicInfo.InfoBean.PhotoBean>>, SwipeRefreshLayout.OnRefreshListener ,SearchView.OnQueryTextListener, MenuItem.OnMenuItemClickListener
+{
 
 
     private RecyclerView picRecyclerView;
@@ -85,6 +80,12 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
                         .getDisplayMetrics()));
         newDatas = new ArrayList<>();
         filterList = new ArrayList<>();
+        final TapBarMenu tapBarMenu = findViewById(R.id.tapBarMenu);
+        tapBarMenu.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                tapBarMenu.toggle();
+            }
+        });
 
     }
 
@@ -93,6 +94,9 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
         getMenuInflater().inflate(R.menu.menu_tool_bar, menu);
         SearchView mSearchView = (SearchView) menu.findItem(R.id.action_search_title).getActionView();
         mSearchView.setOnQueryTextListener(this);
+        MenuItem imageUpdateBtn = menu.findItem(R.id.action_update_image);
+        imageUpdateBtn.setOnMenuItemClickListener(this);
+
         return true;
     }
 
@@ -192,4 +196,17 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
         filterList.clear();
         return false;
     }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        item.getItemId();
+        switch (item.getItemId()){
+            case R.id.action_update_image:
+
+
+                break;
+        }
+        return false;
+    }
+
 }
