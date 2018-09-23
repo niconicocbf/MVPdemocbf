@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.activity.MainActivity">
 
     <LinearLayout
@@ -76,33 +77,22 @@
     </LinearLayout>
 
     <com.michaldrabik.tapbarmenulib.TapBarMenu
+        app:tbm_iconOpened="@mipmap/ic_image_search_black_24dp"
+        app:tbm_iconClosed="@mipmap/ic_image_search_grey600_24dp"
+        app:tbm_backgroundColor="#d6e8ef"
         android:id="@+id/tapBarMenu"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="75dp">
-
-        <ImageView
-            android:id="@+id/item1"
-            android:layout_width="0dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="30dp"
+        app:tbm_buttonPosition="right"
+        android:gravity="end">
+        <android.support.v7.widget.SearchView
+            android:id="@+id/updatePicInfo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingBottom="500dp"
-            android:paddingTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="60dp"
             android:src="@drawable/ic_arrow_to_drawer" />
-
-        <Space
-            android:layout_width="56dp"
-            android:layout_height="match_parent" />
-
-        <ImageView
-            android:id="@+id/item2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:src="@drawable/ic_arrow_to_drawer" />
-
     </com.michaldrabik.tapbarmenulib.TapBarMenu>
 </FrameLayout>

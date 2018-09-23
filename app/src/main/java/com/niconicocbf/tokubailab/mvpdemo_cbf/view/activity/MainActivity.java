@@ -21,9 +21,14 @@ import com.niconicocbf.tokubailab.mvpdemo_cbf.adapter.PicListAdapter;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.base.BaseActivity;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.base.DisplayView;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.bean.PicInfo;
+import com.niconicocbf.tokubailab.mvpdemo_cbf.internet.RetrofitClient;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.presenter.PhotoZoupicpresenter;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements DisplayView<List<PicInfo.InfoBean.PhotoBean>>, SwipeRefreshLayout.OnRefreshListener ,SearchView.OnQueryTextListener, MenuItem.OnMenuItemClickListener
@@ -43,6 +48,7 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private List<PicInfo.InfoBean.PhotoBean> filterList;
+    private PhotoZoupicpresenter photoZoupicpresenter;
 
 
     @Override
@@ -72,7 +78,6 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
         picRecyclerView = findViewById(R.id.recycler_view);
         mGridLayoutManager = new GridLayoutManager(this, 2);
         picRecyclerView.setLayoutManager(mGridLayoutManager);
-        getmPresenter().getPicInfo();
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
@@ -80,13 +85,31 @@ public class MainActivity extends BaseActivity<PhotoZoupicpresenter> implements 
                         .getDisplayMetrics()));
         newDatas = new ArrayList<>();
         filterList = new ArrayList<>();
+        final SearchView etUpdatePicInfo = findViewById(R.id.updatePicInfo);
         final TapBarMenu tapBarMenu = findViewById(R.id.tapBarMenu);
         tapBarMenu.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 tapBarMenu.toggle();
+                etUpdatePicInfo.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        photoZoupicpresenter.setKeyword(query);
+                        photoZoupicpresenter.getPicInfo();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+
             }
         });
 
+        photoZoupicpresenter = getmPresenter();
+        photoZoupicpresenter.setKeyword("sakura");
+        photoZoupicpresenter.getPicInfo();
     }
 
     @Override

@@ -1,8 +1,13 @@
 package com.niconicocbf.tokubailab.mvpdemo_cbf.model;
 
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.base.DisplayView;
 import com.niconicocbf.tokubailab.mvpdemo_cbf.bean.PicInfo;
+import com.niconicocbf.tokubailab.mvpdemo_cbf.internet.RetrofitClient;
+import com.niconicocbf.tokubailab.mvpdemo_cbf.utils.ToastUtils;
+import com.niconicocbf.tokubailab.mvpdemo_cbf.view.activity.MainActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,28 +19,21 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class PhotozoupicModel {
-    public static String URL="https://api.photozou.jp/rest/search_public.json?keyword=\"sakura\"";
-    public void getPhotoInfo(final DisplayView mDisplayView){
-        OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(URL)
-                    .build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
+    public void getPhotoInfo(final DisplayView mDisplayView,String keyWord){
+        retrofit2.Call<PicInfo> picCall = RetrofitClient.getmSerApi().getPicInfo(keyWord);
+        picCall.enqueue(new retrofit2.Callback<PicInfo>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-
-                mDisplayView.getDataFail(e.toString());
+            public void onResponse(retrofit2.Call<PicInfo> call, retrofit2.Response<PicInfo> response) {
+                if(response.body()!=null){
+                mDisplayView.getDataSuccess(response.body().getInfo().getPhoto());}
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Gson gson=new Gson();
-                PicInfo picInfo = gson.fromJson(response.body().string(), PicInfo.class);
-                List<PicInfo.InfoBean.PhotoBean> photoList = picInfo.getInfo().getPhoto();
-
-                mDisplayView.getDataSuccess(photoList);
+            public void onFailure(retrofit2.Call<PicInfo> call, Throwable t) {
+                ToastUtils.showToast("Get Msg error");
             }
         });
+
+
     }
 }
