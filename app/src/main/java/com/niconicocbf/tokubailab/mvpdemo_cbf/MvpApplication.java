@@ -8,6 +8,7 @@ public class MvpApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //this is a git push test
     }
 
     public static MvpApplication getInstance(){
